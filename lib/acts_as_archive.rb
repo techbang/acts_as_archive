@@ -127,7 +127,7 @@ class ActsAsArchive
           klass.acts_as_archive(:class => self, :archive => true)
         
           self.reflect_on_all_associations.each do |association|
-            if !ActsAsArchive.find(association.klass).empty? && association.options[:dependent]
+            if association.options[:dependent] && !association.options[:polymorphic] && !ActsAsArchive.find(association.klass).empty?
               opts = association.options.dup
               opts[:class_name] = "::#{association.class_name}::Archive"
               opts[:foreign_key] = association.primary_key_name
