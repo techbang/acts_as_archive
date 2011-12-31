@@ -203,7 +203,7 @@ class ActsAsArchive
     end
     
     module InstanceMethods
-      def delete_with_archive(arel, name, binds)
+      def delete_with_archive(arel, name, binds=[])
         @mutex ||= Mutex.new
         @mutex.synchronize do
           unless ActsAsArchive.disabled
