@@ -113,11 +113,11 @@ class ActsAsArchive
           klass = eval(options[:class]) rescue nil
           
           if klass
-            klass.send :set_table_name, options[:table]
+            klass.send :table_name=, options[:table]
           else
             eval <<-EVAL
               class ::#{options[:class]} < ActiveRecord::Base
-                set_table_name "#{options[:table]}"
+                self.table_name = "#{options[:table]}"
               end
             EVAL
             klass = eval("::#{options[:class]}")
