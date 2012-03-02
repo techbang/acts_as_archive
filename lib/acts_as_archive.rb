@@ -207,13 +207,9 @@ class ActsAsArchive
         @mutex ||= Mutex.new
         @mutex.synchronize do
           unless ActsAsArchive.disabled
-            sql = to_sql(arel)
-            
-            # Put the id into place.
-            # Line pulled from ActiveRecord::ConnectionAdapters::Mysql2Adapter.
-            # May not be compatible with other datastores.
-            sql =  sql.gsub("\0") { quote(*(binds.dup).shift.reverse) }
-            
+            bdup = binds.dup
+            sql = to_sql(arel, bdup)
+
             from, where = /DELETE FROM (.+)/i.match(sql)[1].split(/\s+WHERE\s+/i, 2)
             from = from.strip.gsub(/[`"]/, '').split(/\s*,\s*/)
         
